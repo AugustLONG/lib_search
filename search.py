@@ -4,6 +4,8 @@
 import tornado.web
 import tornado.ioloop
 import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 import random
 import os
 
@@ -18,15 +20,13 @@ class SearchHandler(tornado.web.RequestHandler):
 
     def post(self):
         data = self.get_argument("value")
-        zpf = self.request
-        print 'zpf=',zpf
         self.write("You  just   write  " + data)
 
 
 settings = {
     "static_path": os.path.join(os.path.dirname(__file__), "static"),
     "cookie_secret": "rui_zhao_together",
-    "template_path": "./template",
+    "template_path": os.path.join(os.path.dirname(__file__), "template"),
     "debug": True
 }
 
