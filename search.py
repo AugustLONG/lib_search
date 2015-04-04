@@ -19,8 +19,13 @@ class SearchHandler(tornado.web.RequestHandler):
             self.render("index.html")
 
     def post(self):
-        data = self.get_argument("value")
-        self.write("You  just   write  " + data)
+        name = self.get_argument("name")
+        password = self.get_argument("password")
+        email = self.get_argument("email")
+        param = dict(name=name, password=password, email=email)
+        self.render("confirm.html", **param)
+        # self.render("confirm.html", name=name, password=password, email=email)
+        # 这一句和上面用**param的含义是一样的，都是将键值对传到模板上
 
 
 settings = {
@@ -30,8 +35,12 @@ settings = {
     "debug": True
 }
 
-application = tornado.web.Application([(r"/", SearchHandler),
-    (r"/static/(.*)", tornado.web.StaticFileHandler, dict(path = settings["static_path"]))], **settings)
+url_map = []
+
+url_map.append((r"/", SearchHandler))
+url_map.append((r"/static/(.*)", tornado.web.StaticFileHandler, dict(path=settings["static_path"])))
+
+application = tornado.web.Application(url_map, **settings)
 
 if __name__ == "__main__":
     if len(sys.argv) == 2:
